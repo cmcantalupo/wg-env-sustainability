@@ -166,7 +166,29 @@ Batch scheduling according to power costs (carbon, money, et cetera)
 ### HPC Specific Models
 
 * OSTI [Metrics for Evaluating Energy Saving Techniques for Resilient HPC Systems](https://www.osti.gov/servlets/purl/1140455)
-* geopm [Extensible Power Manager](https://github.com/geopm/geopm)
+
+* GEOPM [Extensible Power Manager](https://geopm.github.io)
+
+The Global Extensible Open Power Manager (GEOPM) is a framework for exploring
+power and energy optimizations on heterogeneous platforms.  The GEOPM software
+is split into two packages: The GEOPM Service and the GEOPM HPC Runtime.  The
+GEOPM Service is a general purpose Linux utility which provides user space
+access to low level hardware metrics and configuration knobs.  The GEOPM HPC
+Runtime leverages the GEOPM Service to tune hardware settings in reaction to
+hardware metrics and application feedback instrumented through MPI and OpenMP
+profiling hooks.  The GEOPM HPC Runtime has a pluggable architecture for
+selecting between optimization algorithms.  Some of the built in algorithms
+target energy efficiency, and others optimize performance within a power
+bound.
+
+The GEOPM Service has a much broader set of use cases than the GEOPM HPC
+Runtime package.  The GEOPM Service is available from the [OpenSUSE hardware
+repository](https://download.opensuse.org/repositories/hardware) and does not
+have any HPC specific requirements.  A port of the GEOPM service to Kubernetes
+is in progress, and an open pull request with a proof of concept is [published
+on github](https://github.com/geopm/geopm/pull/2779).  This pull request
+provides a gRPC communication mechanism in place of DBus and provides a
+Kubernetes manifest that demonstrates a simple use case.
 
 ### Programming Languages
 
