@@ -197,7 +197,7 @@ What Makes GEOPM Different?
 The goal of GEOPM is to drive application energy efficiency by resolving three
 related challenges.  The first challenge is to enable hardware tuning
 algorithms to derive a robust estimate of application performance.  This is
-critical because measurements of energy efficiency are expressed as ratios of
+crucial because measurements of energy efficiency are expressed as ratios of
 performance to power, e.g. "perf per watt."  Any dynamic tuning of hardware
 power control parameters with a goal of energy efficiency must derive some
 estimate of application performance.  Without application feedback about the
