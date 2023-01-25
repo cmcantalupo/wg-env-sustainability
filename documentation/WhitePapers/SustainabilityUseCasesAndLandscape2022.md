@@ -175,8 +175,7 @@ Batch scheduling according to power costs (carbon, money, et cetera)
 * Energy Efficiency of Languages [The complete set of tools for energy consumption analysis of programming languages, using Computer Language Benchmark Game](https://github.com/greensoftwarelab/Energy-Languages)
 
 
-Using the GEOPM Service in a Kubernetes Environment
-===================================================
+## Using the GEOPM Service in a Kubernetes Environment
 
 The Global Extensible Open Power Manager (GEOPM) is a framework for exploring
 power and energy optimizations on heterogeneous platforms.  The GEOPM software
@@ -191,8 +190,7 @@ target energy efficiency, and others optimize performance within a power
 bound.
 
 
-What Makes GEOPM Different?
---------------------------
+### What Makes GEOPM Different?
 
 The goal of GEOPM is to drive application energy efficiency by resolving three
 related challenges.  The first challenge is to enable hardware tuning
@@ -223,8 +221,7 @@ application and control algorithm.  For these reasons, restricting the
 privileges of the processes running the control algorithm reduces software
 security audit requirements significantly.
 
-The GEOPM Service
------------------
+### The GEOPM Service
 
 The requirements of the GEOPM HPC Runtime drove the creation of the GEOPM
 Service:
