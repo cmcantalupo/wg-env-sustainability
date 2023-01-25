@@ -1,7 +1,7 @@
 # Current Sustainability Efforts and Use Cases Within the Cloud Native Landscape
 
 ### Contributors
-Huamin Chen, Marlow Weston, Niki Manoledaki, Eun Kyung Lee
+Huamin Chen, Marlow Weston, Niki Manoledaki, Eun Kyung Lee, Christopher Cantalupo
 
 
 <!--
@@ -169,6 +169,15 @@ Batch scheduling according to power costs (carbon, money, et cetera)
 
 * GEOPM [Extensible Power Manager](https://geopm.github.io)
 
+
+### Programming Languages
+
+* Energy Efficiency of Languages [The complete set of tools for energy consumption analysis of programming languages, using Computer Language Benchmark Game](https://github.com/greensoftwarelab/Energy-Languages)
+
+
+Using the GEOPM Service in a Kubernetes Environment
+===================================================
+
 The Global Extensible Open Power Manager (GEOPM) is a framework for exploring
 power and energy optimizations on heterogeneous platforms.  The GEOPM software
 is split into two packages: The GEOPM Service and the GEOPM HPC Runtime.  The
@@ -181,15 +190,80 @@ selecting between optimization algorithms.  Some of the built in algorithms
 target energy efficiency, and others optimize performance within a power
 bound.
 
-The GEOPM Service has a much broader set of use cases than the GEOPM HPC
-Runtime package.  The GEOPM Service is available from the [OpenSUSE hardware
+
+What Makes GEOPM Different?
+--------------------------
+
+The goal of GEOPM is to drive application energy efficiency by resolving three
+related challenges.  The first challenge is to enable hardware tuning
+algorithms to derive a robust estimate of application performance.  This is
+critical because measurements of energy efficiency are expressed as ratios of
+performance to power, e.g. "perf per watt."  Any dynamic tuning of hardware
+power control parameters with a goal of energy efficiency must derive some
+estimate of application performance.  Without application feedback about the
+critical path, these performance estimates may be very inaccurate.  In this
+way, hardware tuning algorithms may interfere with application performance
+leading to longer run times which incur even higher energy costs per unit of
+work than if an adaptive algorithm were not applied.
+
+This leads to the second challenge: enabling a hardware control algorithm to
+be driven by unprivileged user input (i.e. application feedback) is a security
+risk.  Without proper guards in place, this can lead to escalation of
+privilege, denial of service, and impacts to quality of service for other
+users of the system.
+
+The third challenge is providing a software development platform for control
+algorithms that can be safely deployed and use high level languages for data
+analysis.  To effectively gain energy efficiency with some applications,
+significant software dependencies may be required.  Control algorithms may
+rely on optimization software like machine learning packages, or other
+numerical packages.  The application being optimized my be composed of
+millions of lines of code, and there may be significant coupling between the
+application and control algorithm.  For these reasons, restricting the
+privileges of the processes running the control algorithm reduces software
+security audit requirements significantly.
+
+The GEOPM Service
+-----------------
+
+The requirements of the GEOPM HPC Runtime drove the creation of the GEOPM
+Service:
+
+- Read low level metrics from hardware components supplied by a variety of
+  vendors.
+
+- Enable application feedback to drive power management decisions.
+
+- Ensure that power management decisions to not impact performance of future
+  users of the platform after the application terminates.
+
+- Provide administrators with an interface for fine grained access control for
+  reading telemetry and setting control knobs.
+
+- Initiate interactions with clients through a secure channel in order to
+  configure communications over faster mechanisms:
+
+  + Secure channel is DBus when run as a systemd service.  This has been ported
+    to use gRPC as the secure communication channel to support a containerized
+    service in Kubernetes.
+
+  + Fast channel is interprocess shared memory with commands sent over a
+    blocking fifo to a supporting privileged thread. This provides extremely
+    fast batch operations especially when coupled to ioctl drivers or
+    liburing.
+
+- Enable extention to support arbitrary hardware interfaces through the C++
+  IOGroup plugin infrastructure.
+
+- Provide access to the service with bindings to C, C++, and Python (possibly
+  Rust and Golang soon).
+
+The GEOPM Service is available from the [OpenSUSE hardware
 repository](https://download.opensuse.org/repositories/hardware) and does not
-have any HPC specific requirements.  A port of the GEOPM service to Kubernetes
-is in progress, and an open pull request with a proof of concept is [published
-on github](https://github.com/geopm/geopm/pull/2779).  This pull request
-provides a gRPC communication mechanism in place of DBus and provides a
-Kubernetes manifest that demonstrates a simple use case.
+have any HPC specific requirements.
 
-### Programming Languages
-
-* Energy Efficiency of Languages [The complete set of tools for energy consumption analysis of programming languages, using Computer Language Benchmark Game](https://github.com/greensoftwarelab/Energy-Languages)
+A port of the GEOPM service to Kubernetes is in progress, and an open pull
+request with a proof of concept is [published on
+github](https://github.com/geopm/geopm/pull/2779).  This pull request provides
+a gRPC communication mechanism in place of DBus and provides a Kubernetes
+manifest that demonstrates a simple use case.
