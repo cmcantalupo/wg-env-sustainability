@@ -263,4 +263,7 @@ A port of the GEOPM service to Kubernetes is in progress, and an open pull
 request with a proof of concept is [published on
 github](https://github.com/geopm/geopm/pull/2779).  This pull request provides
 a gRPC communication mechanism in place of DBus and provides a Kubernetes
-manifest that demonstrates a simple use case.
+manifest that demonstrates a simple use case.  Some documentation can be found
+in the [service readme
+file](https://github.com/cmcantalupo/geopm/tree/issue-2775/service#kubernetes-support)
+in the pull request branch.
